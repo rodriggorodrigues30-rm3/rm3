@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 /*
   RM³ - App.jsx (versão estável)
-  Este arquivo força o WhatsApp para +55 51 99946-8890 para garantir funcionamento imediato.
+  Este arquivo força o WhatsApp para +555199946-8890 para garantir funcionamento imediato.
   Se preferir, substitua por process.env.REACT_APP_WHATSAPP para usar variável de ambiente.
 */
 
