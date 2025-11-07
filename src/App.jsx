@@ -1,61 +1,56 @@
-import React, { useState } from 'react';
+import React, {useState} from "react";
 
-const WHATSAPP = '+5551999468890'; // updated phone with country code
-const EMAIL = 'rodriggorodrigues30@gmail.com';
-const CIDADE = 'Canoas';
-const REGIAO = 'Grande Porto Alegre e Vale dos Sinos';
+const WHATSAPP_NUMBER = "+5551999468890";
+const WA_DIGITS = WHATSAPP_NUMBER.replace(/[^0-9]/g, '');
 
-export default function App() {
-  const [form, setForm] = useState({ name: '', phone: '', message: '' });
+export default function App(){
   const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({name:'', phone:'', message:''});
 
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  function handleChange(e){ setForm({...form, [e.target.name]: e.target.value}); }
+
+  function openWhatsApp(text){
+    const url = `https://wa.me/${WA_DIGITS}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e){
     e.preventDefault();
-    const leads = JSON.parse(localStorage.getItem('rm3_leads') || '[]');
-    leads.unshift({ ...form, date: new Date().toISOString() });
-    localStorage.setItem('rm3_leads', JSON.stringify(leads));
+    const text = `Olá RM³, gostaria de solicitar um orçamento.%0A
+Meu nome é: ${form.name}%0A
+Telefone: ${form.phone}%0A
+Endereço:%0A
+Descrição do serviço: ${form.message}`;
+    openWhatsApp(text);
     setSent(true);
-    const text = `Olá RM³, meu nome é ${form.name} - ${form.phone}. ${form.message}`;
-    const waUrl = `https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, '_blank');
   }
 
-  function emergency() {
-    const text = 'Emergência elétrica — preciso de atendimento 24h! Endereço: ';
-    const waUrl = `https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, '_blank');
+  function emergencyClick(){
+    const text = `🚨 Emergência elétrica — preciso de atendimento 24h!%0A
+Endereço: `;
+    openWhatsApp(text);
   }
 
   return (
     <div className="rm3-root">
       <header className="rm3-header">
-        <div className="brand">
-          <div>
-            <h1>RM³ Instalações Elétricas</h1>
-            <p className="muted">Atendimento: {CIDADE} • {REGIAO}</p>
-          </div>
+        <div className="brand-text">
+          <h1>RM³ Instalações Elétricas</h1>
+          <p className="muted">Atendimento: Canoas • Grande Porto Alegre e Vale dos Sinos</p>
         </div>
         <nav className="nav-actions">
-          <button onClick={() => window.open(`https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}`, '_blank')} className="btn primary">Chamar no WhatsApp</button>
-          <a href={`mailto:${EMAIL}`} className="muted link">{EMAIL}</a>
+          <a className="btn primary" href={`https://wa.me/${WA_DIGITS}`} target="_blank" rel="noreferrer">Chamar no WhatsApp</a>
         </nav>
       </header>
 
       <section className="hero">
         <div className="hero-content">
           <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
-          <p className="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
-          <div className="hero-ctas">
-            <a href="#contato" className="btn cta">Solicitar Orçamento</a>
-            <a href="#produtos" className="btn outline">Produtos Digitais</a>
+          <p className="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos.</p>
+
+          <div className="cta-row">
+            <button className="btn emergency" onClick={emergencyClick}>Atendimento Emergencial 24h</button>
           </div>
-        </div>
-        <div className="hero-visual" aria-hidden>
-          <div className="spark" />
         </div>
       </section>
 
@@ -70,7 +65,7 @@ export default function App() {
           </div>
         </section>
 
-        <aside id="contato" className="contact">
+        <aside className="contact">
           <h3>Solicitar orçamento</h3>
           <p className="muted">Preencha e receba atendimento via WhatsApp em até 24h.</p>
 
@@ -84,66 +79,45 @@ export default function App() {
           ) : (
             <div className="notice">Mensagem registrada! Abrindo WhatsApp...</div>
           )}
-
-          <div className="contact-extra">
-            <p className="muted small">Ou ligue: <a className="link" href="tel:+5551999468890">+55 51 99946-8890</a></p>
-            <button className="btn outline" onClick={() => window.open('#', '_self')}>Ver Produtos Digitais</button>
-            <button className="btn emergency" onClick={emergency}>Atendimento Emergencial 24h</button>
-          </div>
         </aside>
       </main>
 
       <footer className="footer">
-        <p>© {new Date().getFullYear()} RM³ Instalações Elétricas — {CIDADE} • {REGIAO}</p>
-        <p className="muted small">Feito para RM³ — Versão simplificada</p>
+        <p>© {new Date().getFullYear()} RM³ Instalações Elétricas — Canoas • Grande Porto Alegre e Vale dos Sinos</p>
       </footer>
 
-      <a className="floating-wa" href={`https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" aria-label="Chamar no WhatsApp">📱</a>
+      <a className="floating-wa" href={`https://wa.me/${WA_DIGITS}`} target="_blank" rel="noreferrer">📱</a>
 
       <style>{`
         :root{--bg1:#020617;--bg2:#071a2b;--gold:#d8b34a;--card:rgba(255,255,255,0.03);--muted:#a9b7c4}
-        *{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}
-        body,html,#root{height:100%;margin:0;padding:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
-        .rm3-header{max-width:1200px;margin:18px auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
-        .brand{display:flex;gap:14px;align-items:center}
-        .brand h1{margin:0;font-size:20px}
+        body,html,#root{margin:0;height:100%;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:white;font-family:Inter,Arial,sans-serif}
+        .rm3-header{max-width:1200px;margin:auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+        .brand-text h1{margin:0;font-size:20px}
         .muted{color:var(--muted)}
-        .nav-actions{display:flex;gap:12px;align-items:center}
-        .btn{padding:10px 16px;border-radius:10px;text-decoration:none;display:inline-block}
-        .btn.primary{background:var(--gold);color:#041017;font-weight:700;cursor:pointer;border:none}
-        .btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer}
-        .btn.emergency{background:#c62828;color:white;border:none;padding:10px 12px;border-radius:8px;margin-top:8px;cursor:pointer}
-        .hero{max-width:1200px;margin:10px auto;display:flex;gap:20px;align-items:stretch;padding:18px}
-        .hero-content{flex:1}
-        .hero h2{margin:0 0 6px 0;font-size:22px}
-        .lead{color:var(--muted);margin:8px 0 12px}
-        .hero-ctas{display:flex;gap:10px}
-        .hero-visual{width:260px;background:linear-gradient(135deg, rgba(216,179,74,0.08), rgba(255,255,255,0.02));border-radius:14px;display:flex;align-items:center;justify-content:center}
-        .spark{width:160px;height:160px;background:radial-gradient(circle at 30% 20%, rgba(216,179,74,0.28), rgba(216,179,74,0.08) 30%, transparent 50%);border-radius:50%}
+        .btn{padding:10px 16px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-block;border:none}
+        .btn.primary{background:var(--gold);color:#041017;font-weight:700}
+        .btn.emergency{background:#c62828;color:white;font-weight:700;padding:12px 18px;border-radius:12px;box-shadow:0 6px 18px rgba(198,40,40,0.25)}
+        .hero{max-width:1200px;margin:auto;padding:20px}
+        .lead{color:var(--muted)}
         .container{max-width:1200px;margin:16px auto;display:grid;grid-template-columns:2fr 1fr;gap:20px;padding:0 18px}
-        .services{background:var(--card);padding:16px;border-radius:12px}
-        .services h3{margin-top:0}
+        .services,.contact{background:var(--card);padding:16px;border-radius:12px}
         .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
         .card{background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-        .contact{background:var(--card);padding:16px;border-radius:12px}
         .form{display:flex;flex-direction:column;gap:10px}
         .form input,.form textarea{padding:10px;border-radius:8px;background:#062234;border:none;color:white}
-        .notice{background:rgba(0,128,0,0.12);padding:10px;border-radius:8px}
-        .footer{max-width:1200px;margin:22px auto;padding:8px;text-align:center;color:var(--muted)}
-        .floating-wa{position:fixed;right:18px;bottom:18px;background:var(--gold);color:#041017;padding:12px 14px;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,0.5);text-decoration:none;font-size:18px}
-        .small{font-size:13px}
-        .link{color:var(--muted);text-decoration:underline}
-        @media(max-width:900px){.container{grid-template-columns:1fr}.hero{flex-direction:column}.hero-visual{width:100%;height:140px}}
+        .footer{text-align:center;color:var(--muted);padding:12px}
+        .floating-wa{position:fixed;right:18px;bottom:18px;background:var(--gold);color:#041017;padding:12px 14px;border-radius:50%;text-decoration:none;font-size:18px}
+        @media(max-width:900px){.container{grid-template-columns:1fr}}
       `}</style>
     </div>
-  );
+  )
 }
 
 function ServiceCard({ title, desc }){
   return (
     <div className="card">
       <h4 style={{margin:'0 0 6px 0'}}>{title}</h4>
-      <p className="muted small" style={{margin:0}}>{desc}</p>
+      <p className="muted" style={{margin:0,fontSize:'13px'}}>{desc}</p>
     </div>
-  );
+  )
 }
