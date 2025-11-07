@@ -1,67 +1,56 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RM³ Instalações Elétricas</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RM³ Instalações Elétricas</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-inner">
-      <h1 class="title">RM³ Instalações Elétricas</h1>
-      <p class="subtitle">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
-      <div class="actions">
-        <a class="btn emergency" id="emergency" href="#" target="_blank">Atendimento Emergencial 24h</a>
-        <a class="btn whatsapp" id="whatsapp" href="#" target="_blank">Chamar no WhatsApp</a>
+  <main class="wrap">
+    <header class="hero">
+      <h1 id="company-name">RM<sup>3</sup> Instalações Elétricas</h1>
+      <p id="coverage">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
+      <div class="cta-row">
+        <button id="btn-emergency" class="btn btn-danger">Atendimento Emergencial 24h</button>
+        <button id="btn-whatsapp" class="btn btn-primary">Chamar no WhatsApp</button>
       </div>
 
       <div class="tip">
-        <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
-        <p class="tip-text" id="weeklyTip">Carregando dica...</p>
+        <h3>⚡ Dica RM<sup>3</sup>:</h3>
+        <div id="tip-text" class="tip-text">Carregando dica...</div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="main">
-    <section class="services">
-      <h3>Serviços</h3>
-      <div class="cards">
-        <article class="card">
-          <h4>Instalações Residenciais</h4>
-          <p>Quadros, tomadas, iluminação, aterramento e proteção.</p>
-        </article>
-        <article class="card">
-          <h4>Manutenção & Urgência</h4>
-          <p>Atendimento rápido para curtos, quedas e sobrecarga.</p>
-        </article>
-        <article class="card">
-          <h4>Projetos & Laudos</h4>
-          <p>Projetos elétricos conforme norma e laudo técnico.</p>
-        </article>
-        <article class="card">
-          <h4>Automação</h4>
-          <p>Automação de tomadas, sensores e eficiência energética.</p>
-        </article>
+    <section class="services" id="services">
+      <h2>Serviços</h2>
+      <div class="grid">
+        <article class="card"><h3>Instalações Residenciais</h3><p>Quadros, tomadas, iluminação, aterramento e proteção.</p></article>
+        <article class="card"><h3>Manutenção & Urgência</h3><p>Atendimento rápido para curtos, quedas e sobrecarga.</p></article>
+        <article class="card"><h3>Projetos & Laudos</h3><p>Projetos elétricos conforme norma e laudo técnico.</p></article>
+        <article class="card"><h3>Automação</h3><p>Automação de tomadas, sensores e eficiência energética.</p></article>
       </div>
     </section>
 
-    <section class="contact">
-      <h3>Solicitar orçamento</h3>
-      <form id="leadForm" onsubmit="handleForm(event)">
-        <input id="name" name="name" placeholder="Nome" />
-        <input id="phone" name="phone" placeholder="Telefone (WhatsApp)" />
-        <textarea id="message" name="message" placeholder="Descreva o serviço / endereço"></textarea>
-        <button type="submit" class="btn submit">Enviar e Abrir WhatsApp</button>
+    <section class="form-section">
+      <h2>Solicitar orçamento</h2>
+      <form id="contact-form" autocomplete="off">
+        <input id="field-name" type="text" placeholder="Nome" />
+        <input id="field-phone" type="text" placeholder="Telefone (WhatsApp)" />
+        <textarea id="field-message" placeholder="Descreva o serviço / endereço"></textarea>
+        <div class="form-row">
+          <button id="btn-send" class="btn btn-send">Enviar e Abrir WhatsApp</button>
+          <button id="btn-clear" class="btn btn-clear" type="button">Limpar rascunho</button>
+        </div>
+        <p class="hint">Observação: seus dados são usados apenas para contato.</p>
       </form>
     </section>
+
+    <footer class="footer">
+      <small>© RM³ Instalações Elétricas — Atendimento: Grande Porto Alegre e Vale dos Sinos</small>
+    </footer>
   </main>
 
-  <footer class="footer">
-    <small>© <span id="year"></span> RM³ Instalações Elétricas — Atendimento: Grande Porto Alegre e Vale dos Sinos</small>
-  </footer>
-
-  <script src="weekly.js"></script>
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
