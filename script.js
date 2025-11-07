@@ -1,46 +1,29 @@
 
-(function(){
-  const PHONE = '+5551999468890'; // updated number
-  const emergencyBtn = document.getElementById('emergencyBtn');
-  const waBtn = document.getElementById('waBtn');
-  const form = document.getElementById('leadForm');
-  const year = document.getElementById('year');
-  year.textContent = new Date().getFullYear();
+const WA_NUMBER = "+5551999468890";
 
-  // WhatsApp messages for different actions
-  function waUrlFor(text){
-    const base = 'https://wa.me/' + PHONE.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(text);
-    return base;
-  }
+document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Emergency button: different message
-  emergencyBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    const msg = "EMERGÊNCIA: Preciso de atendimento imediato (24h). Endereço e detalhes: ";
-    window.open(waUrlFor(msg), '_blank');
-  });
+function openWhatsAppWithMessage(text){
+  const digits = WA_NUMBER.replace(/[^0-9]/g,'');
+  const url = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+}
 
-  // General WhatsApp button (calls for orçamento by default)
-  waBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    const msg = "Olá RM³, gostaria de um orçamento. Meu nome: , telefone: , endereço: ";
-    window.open(waUrlFor(msg), '_blank');
-  });
+document.getElementById('emergencyBtn').addEventListener('click', () => {
+  const msg = "🚨 Atendimento Emergencial 24h 🚨\nOlá! Preciso de um eletricista urgente. Local: (informe endereço).";
+  openWhatsAppWithMessage(msg);
+});
 
-  // Form submits as Orçamento message
-  form.addEventListener('submit', function(ev){
-    ev.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const message = document.getElementById('message').value.trim();
-    const text = `Olá RM³, meu nome é ${name} - ${phone}. ${message}`;
-    // save lead locally
-    try {
-      const leads = JSON.parse(localStorage.getItem('rm3_leads')||'[]');
-      leads.unshift({name,phone,message,date:new Date().toISOString()});
-      localStorage.setItem('rm3_leads', JSON.stringify(leads));
-    } catch(e){}
-    window.open(waUrlFor(text), '_blank');
-  });
+document.getElementById('waBtn').addEventListener('click', () => {
+  const msg = "Olá! Tenho interesse nos serviços da RM³ Instalações Elétricas.";
+  openWhatsAppWithMessage(msg);
+});
 
-})();
+document.getElementById('quoteForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('name').value || '';
+  const phone = document.getElementById('phone').value || '';
+  const message = document.getElementById('message').value || '';
+  const msg = `Olá, meu nome é ${name} (${phone}). Gostaria de um orçamento: ${message}`;
+  openWhatsAppWithMessage(msg);
+});

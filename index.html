@@ -1,32 +1,28 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RM³ Instalações Elétricas</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RM³ Instalações Elétricas</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="brand">
-        <h1 class="brand-title">RM³ Instalações Elétricas</h1>
-        <p class="brand-sub">Atendimento: Canoas • Grande Porto Alegre e Vale dos Sinos</p>
-      </div>
-      <div class="actions">
-        <a id="emergencyBtn" class="btn emergency" href="#" title="Atendimento Emergencial 24h">Atendimento Emergencial 24h</a>
-        <a id="waBtn" class="btn wa" href="#" title="Chamar no WhatsApp">Chamar no WhatsApp</a>
-      </div>
+  <header class="top">
+    <div class="brand">
+      <h1 id="brand-title">RM³ Instalações Elétricas</h1>
+      <p id="brand-sub">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
+    </div>
+
+    <div class="actions">
+      <button id="emergencyBtn" class="btn emergency">Atendimento Emergencial 24h</button>
+      <button id="waBtn" class="btn whatsapp">Chamar no WhatsApp</button>
     </div>
   </header>
 
-  <main class="container">
+  <main class="content">
     <section class="hero">
-      <div class="hero-left">
-        <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
-        <p class="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
-      </div>
-      <div class="hero-right" aria-hidden><!-- visual --></div>
+      <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
+      <p class="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
     </section>
 
     <section class="services">
@@ -39,24 +35,22 @@
       </div>
     </section>
 
-    <aside class="contact" id="contato">
+    <section class="contact">
       <h3>Solicitar orçamento</h3>
       <p class="muted">Preencha e receba atendimento via WhatsApp em até 24h.</p>
-      <form id="leadForm" class="form">
+      <form id="quoteForm" class="form">
         <input name="name" id="name" placeholder="Nome" required />
         <input name="phone" id="phone" placeholder="Telefone (WhatsApp)" required />
         <textarea name="message" id="message" rows="4" placeholder="Descreva o serviço / endereço"></textarea>
-        <div class="form-row">
-          <button type="submit" class="btn primary">Enviar e Abrir WhatsApp (Orçamento)</button>
-        </div>
+        <button type="submit" class="btn primary">Enviar e Abrir WhatsApp</button>
       </form>
-    </aside>
+    </section>
   </main>
 
   <footer class="footer">
-    <p>© <span id="year"></span> RM³ Instalações Elétricas — Canoas • Grande Porto Alegre e Vale dos Sinos</p>
+    <p>© <span id="year"></span> RM³ Instalações Elétricas — Grande Porto Alegre e Vale dos Sinos</p>
   </footer>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
