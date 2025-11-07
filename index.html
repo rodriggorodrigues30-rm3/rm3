@@ -1,12 +1,62 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RM³ Instalações Elétricas</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RM³ Instalações Elétricas</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1 class="brand-title">RM³ Instalações Elétricas</h1>
+        <p class="brand-sub">Atendimento: Canoas • Grande Porto Alegre e Vale dos Sinos</p>
+      </div>
+      <div class="actions">
+        <a id="emergencyBtn" class="btn emergency" href="#" title="Atendimento Emergencial 24h">Atendimento Emergencial 24h</a>
+        <a id="waBtn" class="btn wa" href="#" title="Chamar no WhatsApp">Chamar no WhatsApp</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
+        <p class="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
+      </div>
+      <div class="hero-right" aria-hidden><!-- visual --></div>
+    </section>
+
+    <section class="services">
+      <h3>Serviços</h3>
+      <div class="grid">
+        <div class="card"><h4>Instalações Residenciais</h4><p>Quadros, tomadas, iluminação, aterramento e proteção.</p></div>
+        <div class="card"><h4>Manutenção & Urgência</h4><p>Atendimento rápido para curtos, quedas e sobrecarga.</p></div>
+        <div class="card"><h4>Projetos & Laudos</h4><p>Projetos elétricos conforme norma e laudo técnico.</p></div>
+        <div class="card"><h4>Automação</h4><p>Automação de tomadas, sensores e eficiência energética.</p></div>
+      </div>
+    </section>
+
+    <aside class="contact" id="contato">
+      <h3>Solicitar orçamento</h3>
+      <p class="muted">Preencha e receba atendimento via WhatsApp em até 24h.</p>
+      <form id="leadForm" class="form">
+        <input name="name" id="name" placeholder="Nome" required />
+        <input name="phone" id="phone" placeholder="Telefone (WhatsApp)" required />
+        <textarea name="message" id="message" rows="4" placeholder="Descreva o serviço / endereço"></textarea>
+        <div class="form-row">
+          <button type="submit" class="btn primary">Enviar e Abrir WhatsApp (Orçamento)</button>
+        </div>
+      </form>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> RM³ Instalações Elétricas — Canoas • Grande Porto Alegre e Vale dos Sinos</p>
+  </footer>
+
+<script src="script.js"></script>
+</body>
 </html>
