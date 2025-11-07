@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -7,50 +8,61 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="top">
+  <header class="topbar">
     <div class="brand">
-      <h1 id="brand-title">RM³ Instalações Elétricas</h1>
-      <p id="brand-sub">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
+      <h1>RM³ Instalações Elétricas</h1>
+      <p class="subtitle">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
     </div>
-
     <div class="actions">
-      <button id="emergencyBtn" class="btn emergency">Atendimento Emergencial 24h</button>
-      <button id="waBtn" class="btn whatsapp">Chamar no WhatsApp</button>
+      <a class="btn emergency" href="https://wa.me/5551999468890?text=EMERG%C3%8ANCIA%3A%20Preciso%20de%20atendimento%20imediato%20-%20%5Bendere%C3%A7o%5D" target="_blank" rel="noreferrer">Atendimento Emergencial 24h</a>
+      <a class="btn wa" href="https://wa.me/5551999468890?text=OR%C3%87AMENTO%3A%20Solicito%20or%C3%A7amento%20-%20%5Bendere%C3%A7o%20ou%20descri%C3%A7%C3%A3o%5D" target="_blank" rel="noreferrer">Chamar no WhatsApp</a>
     </div>
   </header>
 
-  <main class="content">
+  <main class="container">
     <section class="hero">
       <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
-      <p class="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
+      <p class="lead">Temperaturas elevadas podem aumentar o consumo de energia e causar aquecimento excessivo em fios e disjuntores. Mantenha revisões elétricas em dia e evite sobrecargas!</p>
     </section>
 
     <section class="services">
-      <h3>Serviços</h3>
-      <div class="grid">
-        <div class="card"><h4>Instalações Residenciais</h4><p>Quadros, tomadas, iluminação, aterramento e proteção.</p></div>
-        <div class="card"><h4>Manutenção & Urgência</h4><p>Atendimento rápido para curtos, quedas e sobrecarga.</p></div>
-        <div class="card"><h4>Projetos & Laudos</h4><p>Projetos elétricos conforme norma e laudo técnico.</p></div>
-        <div class="card"><h4>Automação</h4><p>Automação de tomadas, sensores e eficiência energética.</p></div>
-      </div>
+      <div class="card"><h3>Instalações Residenciais</h3><p>Quadros, tomadas, iluminação, aterramento e proteção.</p></div>
+      <div class="card"><h3>Manutenção & Urgência</h3><p>Atendimento rápido para curtos, quedas e sobrecarga.</p></div>
+      <div class="card"><h3>Projetos & Laudos</h3><p>Projetos elétricos conforme norma e laudo técnico.</p></div>
+      <div class="card"><h3>Automação</h3><p>Automação de tomadas, sensores e eficiência energética.</p></div>
     </section>
 
-    <section class="contact">
+    <aside class="contact">
       <h3>Solicitar orçamento</h3>
-      <p class="muted">Preencha e receba atendimento via WhatsApp em até 24h.</p>
-      <form id="quoteForm" class="form">
+      <form id="leadForm">
         <input name="name" id="name" placeholder="Nome" required />
         <input name="phone" id="phone" placeholder="Telefone (WhatsApp)" required />
         <textarea name="message" id="message" rows="4" placeholder="Descreva o serviço / endereço"></textarea>
-        <button type="submit" class="btn primary">Enviar e Abrir WhatsApp</button>
+        <button id="sendBtn" class="btn primary" type="submit">Enviar e Abrir WhatsApp</button>
       </form>
-    </section>
+      <p class="muted">Ou ligue: <a href="tel:+5551999468890">+55 51 99946-8890</a></p>
+    </aside>
   </main>
 
-  <footer class="footer">
-    <p>© <span id="year"></span> RM³ Instalações Elétricas — Grande Porto Alegre e Vale dos Sinos</p>
-  </footer>
+  <footer class="footer">© <span id="year"></span> RM³ Instalações Elétricas — Grande Porto Alegre e Vale dos Sinos</footer>
 
-  <script src="script.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+const form = document.getElementById('leadForm');
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const message = document.getElementById('message').value.trim();
+  // Save lead locally
+  const leads = JSON.parse(localStorage.getItem('rm3_leads')||'[]');
+  leads.unshift({name,phone,message,date:new Date().toISOString()});
+  localStorage.setItem('rm3_leads',JSON.stringify(leads));
+  // Open WhatsApp with ORÇAMENTO message
+  const text = `ORÇAMENTO: ${name} - ${phone}. ${message}`;
+  const wa = `https://wa.me/5551999468890?text=` + encodeURIComponent(text);
+  window.open(wa,'_blank');
+});
+</script>
 </body>
 </html>
