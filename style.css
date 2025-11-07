@@ -1,12 +1,6 @@
-/* Simple modern dark theme layout tailored to requested design */
+/* Styles for RM3 weekly tip site */
 :root{
-  --bg:#0b1220;
-  --card:#0f1a26;
-  --muted:#9aa7b7;
-  --accent:#ffd166;
-  --accent-dark:#f5b942;
-  --danger:#ff6b61;
-  --glass: rgba(255,255,255,0.03);
+  --bg:#071024; --card:#0f1a26; --muted:#9aa7b7; --accent:#ffd166; --danger:#ff6b61; --glass: rgba(255,255,255,0.03);
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#071024 0%, #071825 100%);color:#e6eef6}
@@ -18,12 +12,9 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;back
 .btn{padding:12px 18px; border-radius:10px; text-decoration:none; color:#071022; font-weight:700}
 .emergency{background:var(--danger); color:white; box-shadow:0 6px 18px rgba(255,107,97,0.12)}
 .whatsapp{background:var(--accent); color:#071022; box-shadow:0 6px 18px rgba(240,180,60,0.08)}
-
 .tip{margin-top:8px}
-.tip h2{margin:0; font-size:16px; color:var(--accent-dark); font-weight:700}
+.tip h2{margin:0; font-size:16px; color:var(--accent); font-weight:700}
 .tip-text{margin:6px 0 0; color:var(--muted); font-size:14px; max-width:760px; margin-left:auto; margin-right:auto}
-
-/* Main content */
 .main{display:flex; flex-direction:column; align-items:center; gap:36px; padding:30px 20px 60px}
 .services{width:100%; max-width:1000px}
 .services h3{text-align:center; color:var(--muted); margin:0 0 18px; font-size:18px}
@@ -31,24 +22,11 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;back
 .card{background:var(--card); padding:20px; border-radius:12px; min-height:120px; color:#e9f1fb; box-shadow:0 6px 20px rgba(2,8,12,0.4)}
 .card h4{margin:0 0 8px; font-size:16px; color:#fbfbfb}
 .card p{margin:0; color:var(--muted); font-size:14px}
-
-/* Contact */
 .contact{width:100%; max-width:700px; text-align:center}
 form{display:flex; flex-direction:column; gap:10px; margin-top:10px}
 input, textarea{padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:var(--glass); color:#eaf3ff; resize:vertical}
 textarea{min-height:80px}
 .submit{background:var(--accent); color:#071022; font-weight:700; border:none; cursor:pointer}
-
-/* Footer */
 .footer{padding:24px 20px; text-align:center; color:var(--muted); font-size:13px}
-
-/* Responsive */
-@media(max-width:900px){
-  .cards{grid-template-columns:repeat(2,1fr)}
-  .title{font-size:36px}
-}
-@media(max-width:520px){
-  .cards{grid-template-columns:1fr}
-  .actions{flex-direction:column}
-  .title{font-size:28px}
-}
+@media(max-width:900px){ .cards{grid-template-columns:repeat(2,1fr)} .title{font-size:36px} }
+@media(max-width:520px){ .cards{grid-template-columns:1fr} .actions{flex-direction:column} .title{font-size:28px} }

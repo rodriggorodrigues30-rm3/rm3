@@ -12,13 +12,13 @@
       <h1 class="title">RM³ Instalações Elétricas</h1>
       <p class="subtitle">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
       <div class="actions">
-        <a class="btn emergency" href="https://wa.me/5551999468890?text=Emerg%C3%AAncia%20-%20Preciso%20de%20atendimento%20imediato" target="_blank">Atendimento Emergencial 24h</a>
-        <a class="btn whatsapp" href="https://wa.me/5551999468890?text=Or%C3%A7amento%20-%20Gostaria%20de%20um%20or%C3%A7amento" target="_blank">Chamar no WhatsApp</a>
+        <a class="btn emergency" id="emergency" href="#" target="_blank">Atendimento Emergencial 24h</a>
+        <a class="btn whatsapp" id="whatsapp" href="#" target="_blank">Chamar no WhatsApp</a>
       </div>
 
       <div class="tip">
         <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
-        <p class="tip-text">Altas temperaturas aumentam o risco de aquecimento em cabos e disjuntores — mantenha suas revisões em dia.</p>
+        <p class="tip-text" id="weeklyTip">Carregando dica...</p>
       </div>
     </div>
   </header>
@@ -58,9 +58,10 @@
   </main>
 
   <footer class="footer">
-    <small>© 2025 RM³ Instalações Elétricas — Atendimento: Grande Porto Alegre e Vale dos Sinos</small>
+    <small>© <span id="year"></span> RM³ Instalações Elétricas — Atendimento: Grande Porto Alegre e Vale dos Sinos</small>
   </footer>
 
+  <script src="weekly.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
