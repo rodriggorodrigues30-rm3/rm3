@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const WHATSAPP = '51999468890';
+const WHATSAPP = '+5551999468890'; // updated phone with country code
 const EMAIL = 'rodriggorodrigues30@gmail.com';
 const CIDADE = 'Canoas';
 const REGIAO = 'Grande Porto Alegre e Vale dos Sinos';
@@ -13,11 +13,6 @@ export default function App() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function openWhatsApp(number, text) {
-    const waUrl = `https://wa.me/${number.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, '_blank');
-  }
-
   function handleSubmit(e) {
     e.preventDefault();
     const leads = JSON.parse(localStorage.getItem('rm3_leads') || '[]');
@@ -25,21 +20,27 @@ export default function App() {
     localStorage.setItem('rm3_leads', JSON.stringify(leads));
     setSent(true);
     const text = `Olá RM³, meu nome é ${form.name} - ${form.phone}. ${form.message}`;
-    openWhatsApp(WHATSAPP, text);
+    const waUrl = `https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+  }
+
+  function emergency() {
+    const text = 'Emergência elétrica — preciso de atendimento 24h! Endereço: ';
+    const waUrl = `https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
   }
 
   return (
     <div className="rm3-root">
       <header className="rm3-header">
         <div className="brand">
-          <img src="/logo.png" alt="RM3" className="logo" />
           <div>
             <h1>RM³ Instalações Elétricas</h1>
             <p className="muted">Atendimento: {CIDADE} • {REGIAO}</p>
           </div>
         </div>
         <nav className="nav-actions">
-          <a onClick={() => openWhatsApp(WHATSAPP, 'Olá, preciso de informações')} className="btn primary" role="button">Chamar no WhatsApp</a>
+          <button onClick={() => window.open(`https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}`, '_blank')} className="btn primary">Chamar no WhatsApp</button>
           <a href={`mailto:${EMAIL}`} className="muted link">{EMAIL}</a>
         </nav>
       </header>
@@ -49,8 +50,8 @@ export default function App() {
           <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
           <p className="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
           <div className="hero-ctas">
-            <a href="#servicos" className="btn outline">Ver Serviços</a>
-            <button className="btn emergency" onClick={() => openWhatsApp(WHATSAPP, 'EMERGÊNCIA: preciso de atendimento urgente! Local: ')}>Atendimento Emergencial 24h</button>
+            <a href="#contato" className="btn cta">Solicitar Orçamento</a>
+            <a href="#produtos" className="btn outline">Produtos Digitais</a>
           </div>
         </div>
         <div className="hero-visual" aria-hidden>
@@ -59,7 +60,7 @@ export default function App() {
       </section>
 
       <main className="container">
-        <section id="servicos" className="services">
+        <section className="services">
           <h3>Serviços</h3>
           <div className="grid">
             <ServiceCard title="Instalações Residenciais" desc="Quadros, tomadas, iluminação, aterramento e proteção."/>
@@ -85,18 +86,19 @@ export default function App() {
           )}
 
           <div className="contact-extra">
-            <p className="muted small">Ou ligue: <a className="link" href="tel:+55">(adicione seu telefone)</a></p>
-            <a className="btn outline" href="#servicos">Ver Serviços</a>
+            <p className="muted small">Ou ligue: <a className="link" href="tel:+5551999468890">+55 51 99946-8890</a></p>
+            <button className="btn outline" onClick={() => window.open('#', '_self')}>Ver Produtos Digitais</button>
+            <button className="btn emergency" onClick={emergency}>Atendimento Emergencial 24h</button>
           </div>
         </aside>
       </main>
 
       <footer className="footer">
         <p>© {new Date().getFullYear()} RM³ Instalações Elétricas — {CIDADE} • {REGIAO}</p>
-        <p className="muted small">Feito para RM³ — Design profissional</p>
+        <p className="muted small">Feito para RM³ — Versão simplificada</p>
       </footer>
 
-      <a className="floating-wa" onClick={() => openWhatsApp(WHATSAPP, 'Olá, preciso de informações')} role="button" aria-label="Chamar no WhatsApp">📱</a>
+      <a className="floating-wa" href={`https://wa.me/${WHATSAPP.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" aria-label="Chamar no WhatsApp">📱</a>
 
       <style>{`
         :root{--bg1:#020617;--bg2:#071a2b;--gold:#d8b34a;--card:rgba(255,255,255,0.03);--muted:#a9b7c4}
@@ -104,14 +106,13 @@ export default function App() {
         body,html,#root{height:100%;margin:0;padding:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
         .rm3-header{max-width:1200px;margin:18px auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
         .brand{display:flex;gap:14px;align-items:center}
-        .logo{width:64px;height:64px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.05)}
         .brand h1{margin:0;font-size:20px}
         .muted{color:var(--muted)}
         .nav-actions{display:flex;gap:12px;align-items:center}
-        .btn{padding:10px 16px;border-radius:10px;text-decoration:none;display:inline-block;cursor:pointer;border:none}
-        .btn.primary{background:var(--gold);color:#041017;font-weight:700}
-        .btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.08)}
-        .btn.emergency{background:#c82323;color:white}
+        .btn{padding:10px 16px;border-radius:10px;text-decoration:none;display:inline-block}
+        .btn.primary{background:var(--gold);color:#041017;font-weight:700;cursor:pointer;border:none}
+        .btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer}
+        .btn.emergency{background:#c62828;color:white;border:none;padding:10px 12px;border-radius:8px;margin-top:8px;cursor:pointer}
         .hero{max-width:1200px;margin:10px auto;display:flex;gap:20px;align-items:stretch;padding:18px}
         .hero-content{flex:1}
         .hero h2{margin:0 0 6px 0;font-size:22px}

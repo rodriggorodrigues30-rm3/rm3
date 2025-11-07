@@ -1,1 +1,2 @@
-:root{--bg1:#031227;--bg2:#08263a;--gold:#f2c94c;--muted:#bfcbd6;--card:rgba(255,255,255,0.03);}*{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}body,html,#root{height:100%;margin:0;padding:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:white}
+/* minimal reset */
+html,body,#root{height:100%;margin:0;padding:0}

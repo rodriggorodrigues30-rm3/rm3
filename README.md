@@ -1,4 +1,1 @@
-# RM³ Instalações Elétricas
-
-Substitua public/logo.png pelo seu logo quando quiser.
-Execute `npm install` e depois `npm run dev` para testar localmente.
+RM3 Site - versão pronta para deploy. Use `npm install` e `npm run dev`.
