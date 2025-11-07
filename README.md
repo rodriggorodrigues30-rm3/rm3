@@ -1,1 +1,3 @@
-RM3 Site - Fix package. Deploy to Vercel. Replace env var REACT_APP_WHATSAPP or edit App.jsx.
+RM3 site - ready for Vite + React.
+Replace public/logo.png with your logo.
+Run: npm install && npm run dev

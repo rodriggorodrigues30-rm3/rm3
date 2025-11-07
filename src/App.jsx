@@ -1,116 +1,89 @@
 import React, { useState } from "react";
-
-const WHATSAPP = "+5551999468890";
+const WHATSAPP = process.env.REACT_APP_WHATSAPP || "+5519999468890";
 const EMAIL = process.env.REACT_APP_EMAIL || "rodriggorodrigues30@gmail.com";
 const CIDADE = process.env.REACT_APP_CIDADE || "Canoas";
 const REGIAO = process.env.REACT_APP_REGIAO || "Grande Porto Alegre e Vale dos Sinos";
-
-function waUrl(number, text = "") {
-  const clean = number.replace(/[^0-9]/g, "");
-  const base = `https://wa.me/${clean}`;
-  return text ? `${base}?text=${encodeURIComponent(text)}` : base;
-}
-
 export default function App() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
-
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
+  function handleChange(e) { setForm({ ...form, [e.target.name]: e.target.value }); }
   function handleSubmit(e) {
     e.preventDefault();
     const leads = JSON.parse(localStorage.getItem("rm3_leads") || "[]");
     leads.unshift({ ...form, date: new Date().toISOString() });
     localStorage.setItem("rm3_leads", JSON.stringify(leads));
     setSent(true);
-    const text = `Olá RM³, meu nome é ${form.name} - ${form.phone}. ${form.message}`;
-    window.open(waUrl(WHATSAPP, text), "_blank");
+    const text = `Olá RM³, meu nome é ${form.name} - ${form.phone}. ${form.message || ""}`;
+    const wa = `https://wa.me/${WHATSAPP.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(text)}`;
+    window.open(wa, "_blank");
   }
-
   return (
-    <div className="rm3-root">
-      <header className="rm3-header">
-        <div className="brand">
-          <img src="/logo.png" alt="RM3" className="logo" />
+    <div style={{fontFamily:'Inter, Arial, sans-serif',background:'#021827',minHeight:'100vh',color:'#fff'}}>
+      <header style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:20,maxWidth:1100,margin:'0 auto'}}>
+        <div style={{display:'flex',alignItems:'center',gap:12}}>
+          <img src="/logo.png" alt="logo" style={{width:72,height:72,borderRadius:10,objectFit:'cover'}} />
           <div>
-            <h1>RM³ Instalações Elétricas</h1>
-            <p className="muted">Atendimento: {CIDADE} • {REGIAO}</p>
+            <h1 style={{margin:0}}>RM³ Instalações Elétricas</h1>
+            <div style={{color:'#9fb0bd'}}>{CIDADE} • {REGIAO}</div>
           </div>
         </div>
-
-        <nav className="nav-actions">
-          <a className="btn primary" href={waUrl(WHATSAPP)} target="_blank" rel="noreferrer">Chamar no WhatsApp</a>
-          <a className="muted link" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+        <nav style={{display:'flex',gap:10,alignItems:'center'}}>
+          <a href={`https://wa.me/${WHATSAPP.replace(/[^0-9]/g,"")}`} style={{background:'#d8b34a',padding:'10px 14px',borderRadius:10,color:'#041017',textDecoration:'none'}}>Chamar no WhatsApp</a>
+          <a href={`mailto:${EMAIL}`} style={{color:'#9fb0bd',textDecoration:'underline'}}>{EMAIL}</a>
         </nav>
       </header>
 
-      <section className="hero">
-        <div className="hero-content">
-          <h2>⚡ Dica RM³: Cuidado com o calor e a sobrecarga elétrica</h2>
-          <p className="lead">Serviços profissionais de instalações, manutenção, automação e laudos técnicos. Atendemos Canoas e Grande Porto Alegre.</p>
-          <div className="hero-ctas">
-            <a href="#contato" className="btn cta">Solicitar Orçamento</a>
-            <a href="#produtos" className="btn outline">Produtos Digitais</a>
+      <main style={{maxWidth:1100,margin:'20px auto',padding:'0 18px',display:'flex',gap:20,alignItems:'center'}}>
+        <div style={{flex:1}}>
+          <h2>⚡ Dica RM³ — Cuidado com o calor e a sobrecarga elétrica</h2>
+          <p style={{color:'#9fb0bd'}}>Serviços profissionais: instalações, manutenção, automação e laudos técnicos. Atendimento rápido para urgências.</p>
+          <div style={{display:'flex',gap:10}}>
+            <a href="#contato" style={{background:'#d8b34a',padding:'10px 14px',borderRadius:10}}>Solicitar Orçamento</a>
+            <a href="#servicos" style={{border:'1px solid rgba(255,255,255,0.06)',padding:'10px 14px',borderRadius:10}}>Ver Serviços</a>
           </div>
         </div>
-        <div className="hero-visual" aria-hidden><div className="spark" /></div>
-      </section>
-
-      <main className="container">
-        <section className="services">
-          <h3>Serviços</h3>
-          <div className="grid">
-            <ServiceCard title="Instalações Residenciais" desc="Quadros, tomadas, iluminação, aterramento e proteção."/>
-            <ServiceCard title="Manutenção & Urgência" desc="Atendimento rápido para curtos, quedas e sobrecarga."/>
-            <ServiceCard title="Projetos & Laudos" desc="Projetos elétricos conforme norma e laudo técnico."/>
-            <ServiceCard title="Automação" desc="Automação de tomadas, sensores e eficiência energética."/>
-          </div>
-        </section>
-
-        <aside id="contato" className="contact">
-          <h3>Solicitar orçamento</h3>
-          <p className="muted">Preencha e receba atendimento via WhatsApp em até 24h.</p>
-
-          {!sent ? (
-            <form onSubmit={handleSubmit} className="form">
-              <input name="name" value={form.name} onChange={handleChange} required placeholder="Nome" />
-              <input name="phone" value={form.phone} onChange={handleChange} required placeholder="Telefone (WhatsApp)" />
-              <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Descreva o serviço / endereço"></textarea>
-              <button type="submit" className="btn primary">Enviar e Abrir WhatsApp</button>
-            </form>
-          ) : (
-            <div className="notice">Mensagem registrada! Abrindo WhatsApp...</div>
-          )}
-
-          <div className="contact-extra">
-            <p className="muted small">Ou ligue: <a className="link" href="tel:+5551999468890">+55 51 99946-8890</a></p>
-            <a className="btn outline" href="#produtos">Ver Produtos Digitais</a>
-          </div>
-        </aside>
+        <div>
+          <img src="/logo.png" alt="visual" style={{width:200,height:200,borderRadius:12}} />
+        </div>
       </main>
 
-      <footer className="footer">
-        <p>© {new Date().getFullYear()} RM³ Instalações Elétricas — {CIDADE} • {REGIAO}</p>
-        <p className="muted small">Feito para RM³ — Design profissional</p>
-      </footer>
+      <section id="servicos" style={{maxWidth:1100,margin:'16px auto',display:'grid',gridTemplateColumns:'2fr 1fr',gap:20,padding:'0 18px'}}>
+        <div style={{background:'rgba(255,255,255,0.02)',padding:16,borderRadius:12}}>
+          <h3>Serviços</h3>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}}>
+            <div style={{background:'rgba(255,255,255,0.02)',padding:14,borderRadius:10}}>
+              <h4 style={{margin:'0 0 8px 0'}}>Instalações Residenciais</h4><p style={{color:'#9fb0bd',margin:0}}>Quadros, tomadas, iluminação, aterramento e proteção.</p>
+            </div>
+            <div style={{background:'rgba(255,255,255,0.02)',padding:14,borderRadius:10}}>
+              <h4 style={{margin:'0 0 8px 0'}}>Manutenção & Urgência</h4><p style={{color:'#9fb0bd',margin:0}}>Atendimento rápido para curtos, quedas e sobrecarga.</p>
+            </div>
+            <div style={{background:'rgba(255,255,255,0.02)',padding:14,borderRadius:10}}>
+              <h4 style={{margin:'0 0 8px 0'}}>Projetos & Laudos</h4><p style={{color:'#9fb0bd',margin:0}}>Projetos elétricos conforme norma e laudo técnico.</p>
+            </div>
+            <div style={{background:'rgba(255,255,255,0.02)',padding:14,borderRadius:10}}>
+              <h4 style={{margin:'0 0 8px 0'}}>Automação</h4><p style={{color:'#9fb0bd',margin:0}}>Automação de tomadas, sensores e eficiência energética.</p>
+            </div>
+          </div>
+        </div>
 
-      <a className="floating-wa" href={waUrl(WHATSAPP)} target="_blank" rel="noreferrer" aria-label="Chamar no WhatsApp">📱</a>
-      <a className="emergency-action" href={waUrl(WHATSAPP)} target="_blank" rel="noreferrer" aria-label="Atendimento Emergencial 24h">
-        <img src="/botao-emergencial.png" alt="Atendimento Emergencial 24h" style={{ height: 64 }} />
-      </a>
+        <aside id="contato" style={{background:'rgba(255,255,255,0.02)',padding:16,borderRadius:12}}>
+          <h3>Solicitar orçamento</h3>
+          <p style={{color:'#9fb0bd'}}>Preencha e receba atendimento via WhatsApp em até 24h.</p>
+          {!sent ? (
+            <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:10}}>
+              <input name="name" value={form.name} onChange={handleChange} required placeholder="Nome" style={{padding:10,borderRadius:8,background:'#051723',border:'none',color:'#fff'}} />
+              <input name="phone" value={form.phone} onChange={handleChange} required placeholder="Telefone (WhatsApp)" style={{padding:10,borderRadius:8,background:'#051723',border:'none',color:'#fff'}} />
+              <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Descreva o serviço / endereço" style={{padding:10,borderRadius:8,background:'#051723',border:'none',color:'#fff'}}></textarea>
+              <button type="submit" style={{background:'#d8b34a',padding:10,borderRadius:8}}>Enviar e Abrir WhatsApp</button>
+            </form>
+          ) : (
+            <div style={{background:'rgba(0,128,0,0.12)',padding:10,borderRadius:8}}>Mensagem registrada! Abrindo WhatsApp...</div>
+          )}
+        </aside>
+      </section>
 
-      <style>{`...`}</style>
-    </div>
-  );
-}
-
-function ServiceCard({ title, desc }) {
-  return (
-    <div className="card">
-      <h4 style={{ margin: "0 0 6px 0" }}>{title}</h4>
-      <p className="muted small" style={{ margin: 0 }}>{desc}</p>
+      <footer style={{maxWidth:1100,margin:'22px auto',padding:8,textAlign:'center',color:'#9fb0bd'}}>© {new Date().getFullYear()} RM³ Instalações Elétricas — {CIDADE} • {REGIAO}</footer>
+      <a href={`https://wa.me/${WHATSAPP.replace(/[^0-9]/g,"")}`} style={{position:'fixed',right:18,bottom:18,background:'#d8b34a',padding:12,borderRadius:50}}>📱</a>
     </div>
   );
 }
