@@ -1,159 +1,136 @@
-// Script to handle tips rotation, WhatsApp links and form persistence
-(() => {
-  const WHATSAPP_NUMBER = "5551999468890"; // +55 51 99946-8890
 
-  // Array of short tips (kept discreet, can rotate weekly)
-  const TIPS = [
-    "Temperaturas elevadas aumentam consumo; revise disjuntores e conexões.",
-    "Evite sobrecarga: distribua aparelhos em circuitos diferentes.",
-    "Use disjuntores e cabos adequados — segurança em primeiro lugar.",
-    "Mantenha quadros limpos e ventilados para reduzir aquecimento."
-  ];
+// script.js - RM3 website fixes
 
-  const TIP_KEY = "rm3_tip_index_v1";
-  const TIP_DATE_KEY = "rm3_tip_date_v1";
+// main contact (international format, no + or spaces)
+const WHATSAPP_NUMBER = "5551999468890";
 
-  function daysSince(dateStr) {
-    if (!dateStr) return 9999;
-    try {
-      const then = new Date(dateStr);
-      const now = new Date();
-      const diff = Math.floor((now - then) / (1000*60*60*24));
-      return diff;
-    } catch(e){ return 9999; }
+// elements
+const nameInput = document.getElementById("nameInput");
+const phoneInput = document.getElementById("phoneInput");
+const descInput = document.getElementById("descInput");
+const sendBtn = document.getElementById("sendBtn");
+const emergencyBtn = document.getElementById("emergencyBtn");
+const whatsappBtn = document.getElementById("whatsappBtn");
+const clearDraftBtn = document.getElementById("clearDraftBtn");
+const tipText = document.getElementById("tipText");
+
+const DRAFT_KEY = "rm3_orcamento_draft_v1";
+
+// short tips (you can edit or add more phrases)
+const TIPS = [
+  "Temperaturas elevadas podem aumentar o consumo e aquecer contatos e disjuntores.",
+  "Verifique periodicamente fusíveis e conexões por sinais de aquecimento.",
+  "Evite ligar vários aparelhos de alta potência na mesma tomada.",
+  "Use disjuntores dimensionados corretamente para proteger seu circuito."
+];
+
+// load random tip (or rotate)
+function loadTip() {
+  try {
+    // pick random tip
+    const idx = Math.floor(Math.random() * TIPS.length);
+    tipText.textContent = TIPS[idx];
+  } catch(e) {
+    tipText.textContent = "Dica indisponível.";
   }
+}
 
-  // Rotate tip weekly (7 days) using localStorage
-  function getCurrentTip() {
-    try {
-      const lastDate = localStorage.getItem(TIP_DATE_KEY);
-      const lastIndex = parseInt(localStorage.getItem(TIP_KEY) || "0", 10) || 0;
-      const days = daysSince(lastDate);
-      if (days >= 7) {
-        const next = (lastIndex + 1) % TIPS.length;
-        localStorage.setItem(TIP_KEY, next.toString());
-        localStorage.setItem(TIP_DATE_KEY, (new Date()).toISOString());
-        return TIPS[next];
-      }
-      return TIPS[lastIndex] || TIPS[0];
-    } catch(e) {
-      return TIPS[0];
-    }
+// localStorage draft functions
+function loadDraft(){
+  try{
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    if(data.name) nameInput.value = data.name;
+    if(data.phone) phoneInput.value = data.phone;
+    if(data.desc) descInput.value = data.desc;
+  }catch(e){ console.error("loadDraft err", e); }
+}
+function saveDraft(){
+  const obj = { name: nameInput.value||"", phone: phoneInput.value||"", desc: descInput.value||"" };
+  try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(obj)); }catch(e){ console.error("saveDraft err", e); }
+}
+function clearDraft(){
+  localStorage.removeItem(DRAFT_KEY);
+  if(nameInput) nameInput.value = "";
+  if(phoneInput) phoneInput.value = "";
+  if(descInput) descInput.value = "";
+}
+
+// pick contact number to open WA (if user provided a number we'll still use main contact for site messages)
+// this returns the number to open the wa.me link with
+function pickContactNumber() {
+  // default use site phone
+  return WHATSAPP_NUMBER;
+}
+
+// build whatsapp message
+function buildWhatsAppMessage(isEmergency=false){
+  const name = (nameInput && nameInput.value.trim()) || "";
+  const phone = (phoneInput && phoneInput.value.trim()) || "";
+  const desc = (descInput && descInput.value.trim()) || "";
+  if(isEmergency){
+    let m = "Atendimento emergencial solicitado.\n";
+    if(name) m += "Nome: " + name + "\n";
+    if(phone) m += "Tel: " + phone + "\n";
+    if(desc) m += "Detalhes: " + desc + "\n";
+    m += "Por favor, retorno urgente.";
+    return m;
+  } else {
+    let m = "Solicito orçamento:\n";
+    if(name) m += "Nome: " + name + "\n";
+    if(phone) m += "Telefone: " + phone + "\n";
+    if(desc) m += "Descrição: " + desc + "\n";
+    m += "\nAguardo contato. Obrigado.";
+    return m;
   }
+}
 
-  // If tip blank or not loaded, immediately set one
-  function ensureTipLoaded() {
-    const el = document.getElementById('tip-text');
-    if (!el) return;
-    const tip = getCurrentTip();
-    el.textContent = tip;
-  }
+// open whatsapp in new tab/window
+function openWhatsApp(number, message){
+  const num = (number || "").replace(/\D/g, "");
+  const encoded = encodeURIComponent(message || "");
+  const url = `https://wa.me/${num}?text=${encoded}`;
+  // open; if popup blocked user may need to allow or click manually
+  window.open(url, "_blank");
+}
 
-  // Build wa.me url
-  function buildWhatsUrl(number, text) {
-    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
-  }
-
-  // Form utilities
-  function getFormData() {
-    return {
-      name: document.getElementById('field-name').value.trim(),
-      phone: document.getElementById('field-phone').value.trim(),
-      message: document.getElementById('field-message').value.trim()
-    };
-  }
-
-  function saveDraft() {
-    try {
-      const d = getFormData();
-      localStorage.setItem('rm3_form_draft_v1', JSON.stringify(d));
-    } catch(e){}
-  }
-
-  function loadDraft() {
-    try {
-      const raw = localStorage.getItem('rm3_form_draft_v1');
-      if (!raw) return;
-      const d = JSON.parse(raw);
-      if (d.name) document.getElementById('field-name').value = d.name;
-      if (d.phone) document.getElementById('field-phone').value = d.phone;
-      if (d.message) document.getElementById('field-message').value = d.message;
-    } catch(e){}
-  }
-
-  function clearDraft() {
-    localStorage.removeItem('rm3_form_draft_v1');
-    const form = document.getElementById('contact-form');
-    if (form) form.reset();
-  }
-
-  function buildBudgetMessage(data) {
-    return `Olá! Gostaria de solicitar um orçamento.%0A%0ANome: ${data.name || '-'}%0ATelefone: ${data.phone || '-'}%0AServiço/Endereço: ${data.message || '-'}`;
-  }
-
-  function buildEmergencyMessage() {
-    return `Atendimento emergencial solicitado. Favor contatar o número +55 51 99946-8890 e enviar localização.`;
-  }
-
-  // Ensure buttons behave
-  function setupButtons() {
-    const btnSend = document.getElementById('btn-send');
-    const btnEmerg = document.getElementById('btn-emergency');
-    const btnWhats = document.getElementById('btn-whatsapp');
-    const btnClear = document.getElementById('btn-clear');
-
-    if (btnSend) {
-      btnSend.addEventListener('click', (e) => {
-        e.preventDefault();
-        const data = getFormData();
-        // open whatsapp with message (new tab)
-        const msg = buildBudgetMessage(data);
-        const url = buildWhatsUrl(WHATSAPP_NUMBER, msg);
-        window.open(url, '_blank');
-        // keep draft saved automatically so user doesn't lose info
-      });
-    }
-
-    if (btnEmerg) {
-      btnEmerg.addEventListener('click', (e) => {
-        e.preventDefault();
-        const msg = buildEmergencyMessage();
-        window.open(buildWhatsUrl(WHATSAPP_NUMBER, msg), '_blank');
-      });
-    }
-
-    if (btnWhats) {
-      btnWhats.addEventListener('click', (e) => {
-        e.preventDefault();
-        const d = getFormData();
-        const useForm = (d.name || d.phone || d.message);
-        const msg = useForm ? buildBudgetMessage(d) : "Olá! Gostaria de mais informações sobre os serviços.";
-        window.open(buildWhatsUrl(WHATSAPP_NUMBER, msg), '_blank');
-      });
-    }
-
-    if (btnClear) {
-      btnClear.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearDraft();
-      });
-    }
-  }
-
-  // attach save listeners
-  function attachSaveListeners() {
-    ['field-name','field-phone','field-message'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener('input', saveDraft);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    ensureTipLoaded();
-    loadDraft();
-    setupButtons();
-    attachSaveListeners();
+// attach events
+if(sendBtn){
+  sendBtn.addEventListener("click", function(){
+    saveDraft();
+    const message = buildWhatsAppMessage(false);
+    const target = pickContactNumber();
+    openWhatsApp(target, message);
+    // do NOT clear draft automatically to avoid losing data
   });
+}
+if(clearDraftBtn){
+  clearDraftBtn.addEventListener("click", function(){
+    clearDraft();
+    alert("Rascunho limpo.");
+  });
+}
+if(emergencyBtn){
+  emergencyBtn.addEventListener("click", function(){
+    // open emergency message
+    const message = buildWhatsAppMessage(true);
+    openWhatsApp(WHATSAPP_NUMBER, message);
+  });
+}
+if(whatsappBtn){
+  whatsappBtn.addEventListener("click", function(){
+    const message = "Olá! Gostaria de solicitar atendimento / informações.";
+    openWhatsApp(WHATSAPP_NUMBER, message);
+  });
+}
 
-})();
+// save draft while typing
+[nameInput, phoneInput, descInput].forEach(el => {
+  if(!el) return;
+  el.addEventListener("input", saveDraft);
+});
+
+// init
+loadTip();
+loadDraft();

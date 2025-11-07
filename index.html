@@ -1,56 +1,52 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RM³ Instalações Elétricas</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RM³ Instalações Elétricas</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="wrap">
+  <main class="container">
     <header class="hero">
-      <h1 id="company-name">RM<sup>3</sup> Instalações Elétricas</h1>
+      <h1 id="companyName">RM³ Instalações Elétricas</h1>
       <p id="coverage">Atendimento: Grande Porto Alegre e Vale dos Sinos</p>
       <div class="cta-row">
-        <button id="btn-emergency" class="btn btn-danger">Atendimento Emergencial 24h</button>
-        <button id="btn-whatsapp" class="btn btn-primary">Chamar no WhatsApp</button>
+        <button id="emergencyBtn" class="btn btn-danger">Atendimento Emergencial 24h</button>
+        <button id="whatsappBtn" class="btn btn-yellow">Chamar no WhatsApp</button>
       </div>
-
       <div class="tip">
-        <h3>⚡ Dica RM<sup>3</sup>:</h3>
-        <div id="tip-text" class="tip-text">Carregando dica...</div>
+        <strong>⚡ Dica RM³:</strong>
+        <div id="tipText" class="tip-text">Carregando dica...</div>
       </div>
     </header>
 
-    <section class="services" id="services">
+    <section class="services">
       <h2>Serviços</h2>
-      <div class="grid">
-        <article class="card"><h3>Instalações Residenciais</h3><p>Quadros, tomadas, iluminação, aterramento e proteção.</p></article>
-        <article class="card"><h3>Manutenção & Urgência</h3><p>Atendimento rápido para curtos, quedas e sobrecarga.</p></article>
-        <article class="card"><h3>Projetos & Laudos</h3><p>Projetos elétricos conforme norma e laudo técnico.</p></article>
-        <article class="card"><h3>Automação</h3><p>Automação de tomadas, sensores e eficiência energética.</p></article>
+      <div class="cards">
+        <div class="card">Instalações Residenciais<br/><small>Quadros, tomadas, iluminação, aterramento e proteção.</small></div>
+        <div class="card">Manutenção & Urgência<br/><small>Atendimento rápido para curtos, quedas e sobrecarga.</small></div>
+        <div class="card">Projetos & Laudos<br/><small>Projetos elétricos conforme norma e laudo técnico.</small></div>
+        <div class="card">Automação<br/><small>Automação de tomadas, sensores e eficiência energética.</small></div>
       </div>
     </section>
 
     <section class="form-section">
       <h2>Solicitar orçamento</h2>
-      <form id="contact-form" autocomplete="off">
-        <input id="field-name" type="text" placeholder="Nome" />
-        <input id="field-phone" type="text" placeholder="Telefone (WhatsApp)" />
-        <textarea id="field-message" placeholder="Descreva o serviço / endereço"></textarea>
-        <div class="form-row">
-          <button id="btn-send" class="btn btn-send">Enviar e Abrir WhatsApp</button>
-          <button id="btn-clear" class="btn btn-clear" type="button">Limpar rascunho</button>
+      <div id="orcamento-form" class="form">
+        <input id="nameInput" placeholder="Nome" />
+        <input id="phoneInput" placeholder="Telefone (WhatsApp)" />
+        <textarea id="descInput" placeholder="Descreva o serviço / endereço"></textarea>
+        <div class="form-actions">
+          <button id="sendBtn" class="btn btn-yellow" type="button">Enviar e Abrir WhatsApp</button>
+          <button id="clearDraftBtn" class="btn" type="button">Limpar rascunho</button>
         </div>
-        <p class="hint">Observação: seus dados são usados apenas para contato.</p>
-      </form>
+      </div>
     </section>
 
-    <footer class="footer">
-      <small>© RM³ Instalações Elétricas — Atendimento: Grande Porto Alegre e Vale dos Sinos</small>
-    </footer>
+    <footer class="footer">© 2025 RM³ Instalações Elétricas</footer>
   </main>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
