@@ -1,136 +1,42 @@
+// script.js - atualizações: botões diretos para WhatsApp + rotação de dicas weekly
+const MAIN_WHATSAPP = "5551999468890";
 
-// script.js - RM3 website fixes
-
-// main contact (international format, no + or spaces)
-const WHATSAPP_NUMBER = "5551999468890";
-
-// elements
-const nameInput = document.getElementById("nameInput");
-const phoneInput = document.getElementById("phoneInput");
-const descInput = document.getElementById("descInput");
-const sendBtn = document.getElementById("sendBtn");
-const emergencyBtn = document.getElementById("emergencyBtn");
-const whatsappBtn = document.getElementById("whatsappBtn");
-const clearDraftBtn = document.getElementById("clearDraftBtn");
-const tipText = document.getElementById("tipText");
-
-const DRAFT_KEY = "rm3_orcamento_draft_v1";
-
-// short tips (you can edit or add more phrases)
 const TIPS = [
-  "Temperaturas elevadas podem aumentar o consumo e aquecer contatos e disjuntores.",
-  "Verifique periodicamente fusíveis e conexões por sinais de aquecimento.",
-  "Evite ligar vários aparelhos de alta potência na mesma tomada.",
-  "Use disjuntores dimensionados corretamente para proteger seu circuito."
+  "Temperaturas elevadas aumentam consumo; revise disjuntores e conexões.",
+  "Evite sobrecarga: distribua aparelhos em circuitos diferentes.",
+  "Mantenha ventilação adequada em quadros de distribuição.",
+  "Use disjuntores e cabos corretos para cada circuito."
 ];
 
-// load random tip (or rotate)
-function loadTip() {
-  try {
-    // pick random tip
-    const idx = Math.floor(Math.random() * TIPS.length);
-    tipText.textContent = TIPS[idx];
-  } catch(e) {
-    tipText.textContent = "Dica indisponível.";
-  }
-}
+const TIP_KEY = "rm3_tip_idx_v3";
+const TIP_DATE_KEY = "rm3_tip_date_v3";
 
-// localStorage draft functions
-function loadDraft(){
+function daysBetween(a,b){ return Math.floor((new Date(b)-new Date(a))/(1000*60*60*24)); }
+
+function rotateTipWeekly(){
   try{
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if(!raw) return;
-    const data = JSON.parse(raw);
-    if(data.name) nameInput.value = data.name;
-    if(data.phone) phoneInput.value = data.phone;
-    if(data.desc) descInput.value = data.desc;
-  }catch(e){ console.error("loadDraft err", e); }
-}
-function saveDraft(){
-  const obj = { name: nameInput.value||"", phone: phoneInput.value||"", desc: descInput.value||"" };
-  try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(obj)); }catch(e){ console.error("saveDraft err", e); }
-}
-function clearDraft(){
-  localStorage.removeItem(DRAFT_KEY);
-  if(nameInput) nameInput.value = "";
-  if(phoneInput) phoneInput.value = "";
-  if(descInput) descInput.value = "";
+    const lastDate = localStorage.getItem(TIP_DATE_KEY);
+    let idx = parseInt(localStorage.getItem(TIP_KEY) || "0",10) || 0;
+    if(!lastDate || daysBetween(lastDate, new Date().toISOString()) >= 7){
+      idx = (idx + 1) % TIPS.length;
+      localStorage.setItem(TIP_KEY, idx.toString());
+      localStorage.setItem(TIP_DATE_KEY, new Date().toISOString());
+    }
+    const el = document.getElementById('tipText');
+    if(el) el.textContent = TIPS[idx] || TIPS[0];
+  }catch(e){ console.error(e); }
 }
 
-// pick contact number to open WA (if user provided a number we'll still use main contact for site messages)
-// this returns the number to open the wa.me link with
-function pickContactNumber() {
-  // default use site phone
-  return WHATSAPP_NUMBER;
+// Atualiza hrefs das âncoras com mensagens dinâmicas (inclui cidade/região)
+function setButtonLinks(){
+  const emergency = document.getElementById('emergencyLink');
+  const whatsapp = document.getElementById('whatsappLink');
+  if(emergency) emergency.href = `https://wa.me/${MAIN_WHATSAPP}?text=${encodeURIComponent('Atendimento emergencial solicitado. Favor retorno urgente. Local: Canoas')}`;
+  if(whatsapp) whatsapp.href = `https://wa.me/${MAIN_WHATSAPP}?text=${encodeURIComponent('Solicito orcamento para servicos eletricos. Local: Canoas - Grande Porto Alegre e Vale dos Sinos. Detalhes:')}`;
 }
 
-// build whatsapp message
-function buildWhatsAppMessage(isEmergency=false){
-  const name = (nameInput && nameInput.value.trim()) || "";
-  const phone = (phoneInput && phoneInput.value.trim()) || "";
-  const desc = (descInput && descInput.value.trim()) || "";
-  if(isEmergency){
-    let m = "Atendimento emergencial solicitado.\n";
-    if(name) m += "Nome: " + name + "\n";
-    if(phone) m += "Tel: " + phone + "\n";
-    if(desc) m += "Detalhes: " + desc + "\n";
-    m += "Por favor, retorno urgente.";
-    return m;
-  } else {
-    let m = "Solicito orçamento:\n";
-    if(name) m += "Nome: " + name + "\n";
-    if(phone) m += "Telefone: " + phone + "\n";
-    if(desc) m += "Descrição: " + desc + "\n";
-    m += "\nAguardo contato. Obrigado.";
-    return m;
-  }
-}
-
-// open whatsapp in new tab/window
-function openWhatsApp(number, message){
-  const num = (number || "").replace(/\D/g, "");
-  const encoded = encodeURIComponent(message || "");
-  const url = `https://wa.me/${num}?text=${encoded}`;
-  // open; if popup blocked user may need to allow or click manually
-  window.open(url, "_blank");
-}
-
-// attach events
-if(sendBtn){
-  sendBtn.addEventListener("click", function(){
-    saveDraft();
-    const message = buildWhatsAppMessage(false);
-    const target = pickContactNumber();
-    openWhatsApp(target, message);
-    // do NOT clear draft automatically to avoid losing data
-  });
-}
-if(clearDraftBtn){
-  clearDraftBtn.addEventListener("click", function(){
-    clearDraft();
-    alert("Rascunho limpo.");
-  });
-}
-if(emergencyBtn){
-  emergencyBtn.addEventListener("click", function(){
-    // open emergency message
-    const message = buildWhatsAppMessage(true);
-    openWhatsApp(WHATSAPP_NUMBER, message);
-  });
-}
-if(whatsappBtn){
-  whatsappBtn.addEventListener("click", function(){
-    const message = "Olá! Gostaria de solicitar atendimento / informações.";
-    openWhatsApp(WHATSAPP_NUMBER, message);
-  });
-}
-
-// save draft while typing
-[nameInput, phoneInput, descInput].forEach(el => {
-  if(!el) return;
-  el.addEventListener("input", saveDraft);
+document.addEventListener('DOMContentLoaded', function(){
+  // garante que a dica aparece imediatamente (fallback em HTML) e depois atualiza/rota semanal
+  rotateTipWeekly();
+  setButtonLinks();
 });
-
-// init
-loadTip();
-loadDraft();
